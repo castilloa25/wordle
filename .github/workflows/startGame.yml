@@ -10,4 +10,4 @@ jobs:
       - name: Generate semi-random number from issue
         run: echo $EVENT_ID
         env:
-          EVENT_ID: ${{ github.event.id }}
+          EVENT_ID: ${{ toJSON(github.event) }}
