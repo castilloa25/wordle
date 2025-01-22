@@ -10,6 +10,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Generate semi-random number from issue
-        run: echo "$EVENT_ID % $(cat words.txt | wc -l)" | bc
+        run: |
+          LINE=$(echo "$EVENT_ID % $(cat words.txt | wc -l)" | bc)
+          head -n $LINE words.txt | tail -n 1
         env:
           EVENT_ID: ${{ github.event.issue.id }}
