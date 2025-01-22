@@ -1,7 +1,7 @@
 name: Start game on issue
 on:
   issues:
-    types: [created]
+    types: [opened]
 
 jobs:
   startGame:
