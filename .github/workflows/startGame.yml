@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate semi-random number from issue
-        run: echo $EVENT_ID
+        run: echo "$EVENT_ID % $(cat words.txt | wc -l)" | bc
         env:
           EVENT_ID: ${{ github.event.issue.id }}
