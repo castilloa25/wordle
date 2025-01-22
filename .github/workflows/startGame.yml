@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Make executable
+        run: chmod u+x wordle.py
       - name: Generate semi-random number from issue
         run: |
           LINE=$(echo "$EVENT_ID % $(cat words.txt | wc -l)" | bc)
