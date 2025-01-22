@@ -1,0 +1,13 @@
+name: Start game on issue
+on:
+  issues:
+    types: [created]
+
+jobs:
+  startGame:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate semi-random number from issue
+        run: echo $EVENT_ID
+        env:
+          EVENT_ID: ${{ github.event.id }}
