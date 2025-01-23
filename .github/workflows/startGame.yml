@@ -21,6 +21,7 @@ jobs:
           TARGET=$(head -n $LINE words.txt | tail -n 1)
           GUESS=$(echo $TITLE | cut -c 1-5)
           ./wordle.py $TARGET $GUESS >> output.txt
+          echo "testvalue=something\n" >> $GITHUB_OUTPUT
           echo "result_code=$?\n" >> $GITHUB_OUTPUT
           echo "result=$(cat output.txt)\n" >> $GITHUB_OUTPUT
         env:
@@ -33,6 +34,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
-          BODY: >
+          BODY: |
+            testvalue: ${{ steps.computeResponse.outputs.testvalue }}
             result code: ${{ steps.computeResponse.outputs.result_code }}
             result: ${{ steps.computeResponse.outputs.result }}
