@@ -31,7 +31,7 @@ jobs:
         run: |
           gh issue comment "$NUMBER" --body "$BODY"
           gh issue close "$NUMBER"
-        if: ${{ steps.computeResponse.outputs.result_code == 0 }}
+        if: ${{ fromJSON(steps.computeResponse.outputs.result_code) == 0 }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
@@ -41,7 +41,7 @@ jobs:
       - name: Add comment with differences on failure
         run: |
           gh issue comment "$NUMBER" --body-file output.txt
-        if: ${{ steps.computeResponse.outputs.result_code == 1 }}
+        if: ${{ fromJSON(steps.computeResponse.outputs.result_code) == 1 }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
