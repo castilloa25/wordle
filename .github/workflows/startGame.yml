@@ -27,6 +27,8 @@ jobs:
           EVENT_ID: ${{ github.event.issue.id }}
           TITLE: ${{ github.event.issue.title }}
         continue-on-error: true
+      - name: print error code
+        run: echo "xxx${{ steps.computeResponse.outputs.result_code }}xxx"
       - name: Add comment and close on success
         run: |
           gh issue comment "$NUMBER" --body "$BODY"
