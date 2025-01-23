@@ -20,6 +20,7 @@ jobs:
         env:
           EVENT_ID: ${{ github.event.issue.id }}
           TITLE: ${{ github.event.issue.title }}
+        continue-on-error: true
       - name: Add comment
         run: gh issue comment "$NUMBER" --body "$BODY"
         env:
