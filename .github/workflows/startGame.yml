@@ -22,20 +22,27 @@ jobs:
           TARGET=$(head -n $LINE words.txt | tail -n 1)
           GUESS=$(echo $TITLE | cut -c 1-5)
           ./wordle.py $TARGET $GUESS >> output.txt
-          echo "testvalue=something\n" >> $GITHUB_OUTPUT
           echo "result_code=$?\n" >> $GITHUB_OUTPUT
-          echo "result=$(cat output.txt)\n" >> $GITHUB_OUTPUT
         env:
           EVENT_ID: ${{ github.event.issue.id }}
           TITLE: ${{ github.event.issue.title }}
         continue-on-error: true
-      - name: Add comment
-        run: gh issue comment "$NUMBER" --body "$BODY"
+      - name: Add comment and close on success
+        run: |
+          gh issue comment "$NUMBER" --body "$BODY"
+          gh issue close "$NUMBER"
+        if: ${{ steps.computeResponse.outputs.result_code == 0 }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
           BODY: |
-            testvalue: ${{ steps.computeResponse.outputs.testvalue }}
-            result code: ${{ steps.computeResponse.outputs.result_code }}
-            result: ${{ steps.computeResponse.outputs.result }}
+            Congratulations, that was the right word!
+      - name: Add comment with differences on failure
+        run: |
+          gh issue comment "$NUMBER" --body-file output.txt
+        if: ${{ steps.computeResponse.outputs.result_code == 1 }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
