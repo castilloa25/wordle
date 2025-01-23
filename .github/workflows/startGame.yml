@@ -43,7 +43,7 @@ jobs:
       - name: Add comment with differences on failure
         run: |
           gh issue comment "$NUMBER" --body-file output.txt
-        if: ${{ fromJSON(steps.computeResponse.outputs.result_code) == 1 }}
+        if: ${{ steps.computeResponse.outputs.result_code == 1 }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
