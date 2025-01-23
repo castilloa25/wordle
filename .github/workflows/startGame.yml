@@ -14,12 +14,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Make executable
         run: chmod u+x wordle.py
-      - name: Generate semi-random number from issue
+      - name: Compute appropriate response
+        id: computeResponse
         run: |
           LINE=$(echo "$EVENT_ID % $(cat words.txt | wc -l)" | bc)
           TARGET=$(head -n $LINE words.txt | tail -n 1)
           GUESS=$(echo $TITLE | cut -c 1-5)
-          ./wordle.py $TARGET $GUESS
+          ./wordle.py $TARGET $GUESS >> output.txt
+          echo "result_code=$?\n" >> $GITHUB_OUTPUT
+          echo "result=$(cat output.txt)\n" >> $GITHUB_OUTPUT
         env:
           EVENT_ID: ${{ github.event.issue.id }}
           TITLE: ${{ github.event.issue.title }}
@@ -31,6 +34,5 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
           BODY: >
-            This issue is available for anyone to work on.
-            **Make sure to reference this issue in your pull request.**
-            :sparkles: Thank you for your contribution! :sparkles:
+            result code: ${{ steps.computeResponse.outputs.result_code }}
+            result: ${{ steps.computeResponse.outputs.result }}
