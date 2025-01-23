@@ -22,7 +22,7 @@ jobs:
           TARGET=$(head -n $LINE words.txt | tail -n 1)
           GUESS=$(echo $TITLE | cut -c 1-5)
           ./wordle.py $TARGET $GUESS >> output.txt
-          echo "result_code=$?\n" >> $GITHUB_OUTPUT
+          echo "result_code=$?" >> $GITHUB_OUTPUT
         env:
           EVENT_ID: ${{ github.event.issue.id }}
           TITLE: ${{ github.event.issue.title }}
