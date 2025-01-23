@@ -2,6 +2,8 @@ name: Start game on issue
 on:
   issues:
     types: [opened]
+  issue_comment:
+    types: [created]
 
 jobs:
   startGame:
@@ -25,7 +27,7 @@ jobs:
           echo "result_code=$?" >> $GITHUB_OUTPUT
         env:
           EVENT_ID: ${{ github.event.issue.id }}
-          TITLE: ${{ github.event.issue.title }}
+          TITLE: ${{ github.event.comment.body || github.event.issue.title }}
         continue-on-error: true
       - name: Add comment and close on success
         run: |
