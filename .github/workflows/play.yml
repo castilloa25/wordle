@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: see event id
-      run: echo $EVENT_ID
-      env:
-          EVENT_ID: ${{ to JSON(github.event)}}
+        run: echo $EVENT_ID
+        env:
+          EVENT_ID: ${github.event.issue.id}
       
