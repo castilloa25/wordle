@@ -1,0 +1,13 @@
+name: Play the game
+on: 
+  issues:
+    types: [opened]
+jobs:
+  playGames:
+    runs-on: ubuntu-latest
+    steps:
+      - name: see event id
+      run: echo $EVENT_ID
+      env:
+          EVENT_ID: ${{ to JSON(github.event)}}
+      
