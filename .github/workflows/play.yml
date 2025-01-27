@@ -3,7 +3,7 @@ on:
   issues:
     types: [opened]
 jobs:
-  playGames:
+  playGame:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
