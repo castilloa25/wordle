@@ -13,5 +13,5 @@ jobs:
           LINE=$(echo $EVENT_ID % $(cat words.txt | wc -l) " | bc)
           echo $LINE
         env:
-          EVENT_ID: ${github.event.issue.id}
+          EVENT_ID: ${{github.event.issue.id}}
       
