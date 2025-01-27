@@ -1,4 +1,4 @@
-name: Play the game
+name: Play the Game
 on: 
   issues:
     types: [opened]
@@ -6,16 +6,20 @@ jobs:
   playGame:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: see event id
-        run: 
-          LINE=$(echo $EVENT_ID % $(cat words.txt | wc -l) + 1" | bc)
-          echo $LINE
-      - name: get the target word
+      - name: Calculate Event ID Line
         run: |
-          TARGET=$(head -n $LINE words.txt | tail -n -1)
-          echo $TARGET
-          env:
-          EVENT_ID: ${{{github.event.issue.id}}
-      
+          LINE=$(echo "$EVENT_ID % $(wc -l < words.txt) + 1" | bc)
+          echo "Calculated LINE: $LINE"
+        env:
+          EVENT_ID: ${{ github.event.issue.id }}
+      - name: Get the Target Word
+        run: |
+          TARGET=$(sed -n "${LINE}p" words.txt)
+          GUESS=$(echo "$TITLE" | cut -d' ' -f1)
+          echo "Target Word: $TARGET"
+          echo "Guess: $GUESS"
+        env:
+          TITLE: ${{ github.event.issue.title }}
+
